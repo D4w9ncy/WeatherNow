@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   font-family: inter;
 
@@ -179,9 +183,9 @@ button {
   color: #ff4d4f;
   font-size: 0.85rem;
   position: absolute;
-  width: 110%;
+  left: -18px;
+  right: 0px;
   bottom: -22px;
-  left: 0px;
   font-weight: 500;
 }
 
@@ -280,6 +284,10 @@ button {
   button {
     left: 340px;
   }
+
+  .error-message {
+    left: 70px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -287,6 +295,10 @@ button {
     display: block;
     width: 70%;
     margin: 2rem auto;
+  }
+
+  .error-message {
+    left: 70px;
   }
 }
 
