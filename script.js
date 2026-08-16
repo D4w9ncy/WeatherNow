@@ -58,16 +58,25 @@ const getWeatherDescription = function (code) {
   return "невідомо";
 };
 
-const getWeatherSVG = function (code) {
-  if (code === 0) return { svg: "day.svg", img: "sun.jpg" };
-  if (code === 1 || code === 2 || code === 3)
-    return { svg: "cloudy-day-1.svg", img: "cloudy.jpg" };
-  if (code === 45 || code === 48) return { svg: "cloudy", img: "mist.jpg" };
+const getWeatherSVG = function (code, time) {
+  const hour = parseInt(time, 10);
+  const isNight = hour >= 21 || hour <= 5;
+  if (code === 0) {
+    return isNight
+      ? { svg: "night.svg", img: "moon.avif" }
+      : { svg: "day.svg", img: "sun.jpg" };
+  }
+  if (code === 1 || code === 2 || code === 3) {
+    return isNight
+      ? { svg: "cloudy-night-1.svg", img: "night.webp" }
+      : { svg: "cloudy-day-1.svg", img: "cloudy.jpg" };
+  }
+  if (code === 45 || code === 48) return { svg: "cloudy.svg", img: "mist.jpg" };
   if (code >= 51 && code <= 67) return { svg: "rainy-6.svg", img: "rainy.jpg" };
   if (code >= 71 && code <= 77)
     return { svg: "snowy-1.svg", img: "snowy.avif" };
   if (code >= 95) return { svg: "thunder.svg", img: "thunder.avif" };
-  return "невідомо";
+  return { svg: "cloudy.svg", img: "White_Color.jpg" };
 };
 
 const getLocation = async function (lat, lng) {
@@ -91,14 +100,13 @@ const getCurrentWeather = async function (lat, lng) {
   try {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,surface_pressure,wind_speed_10m,weather_code,precipitation&hourly=temperature_2m,weathercode,windspeed_10m,precipitation_probability&timezone=auto`;
     const data = await getJSON(url);
-    console.log(data);
-
     const currentTemp = Math.round(data.current.temperature_2m);
     const windSpeed = Math.round(data.current.wind_speed_10m);
     const weatherCode = data.current.weather_code;
     const feelsTemp = Math.round(data.current.apparent_temperature);
     const codeText = getWeatherDescription(weatherCode);
-    const codeImg = getWeatherSVG(weatherCode);
+    const currentHour = parseInt(data.current.time.slice(11, 13), 10);
+    const codeImg = getWeatherSVG(weatherCode, currentHour);
     const currentHumidity = data.current.relative_humidity_2m;
     const currentPressure = Math.round(data.current.surface_pressure * 0.75);
     const precipitationAmount = data.current.precipitation * 100;
@@ -123,12 +131,11 @@ const getFutureWeather = async function (lat, lng) {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,surface_pressure,wind_speed_10m,weather_code,precipitation&hourly=temperature_2m,weathercode,windspeed_10m&timezone=auto`;
 
     const data = await getJSON(url);
-    console.log(data);
     const currentTime = data.current.time;
     const currentHourStr = currentTime.slice(0, 13) + ":00";
     const allHourList = data.hourly.time;
     const currentIndex = allHourList.indexOf(currentHourStr);
-    console.log(currentHourStr, currentIndex);
+    const currentHour = parseInt(data.current.time.slice(11, 13), 10);
     const futureTime = [];
     for (let i = 1; i <= 5; i++) {
       const timeString = data.hourly.time[currentIndex + i].slice(-5);
@@ -154,8 +161,8 @@ const getFutureWeather = async function (lat, lng) {
       futureCode.push(timeString);
     }
     const weatherSVG = [];
-    for (el of futureCode) {
-      weatherSVG.push(getWeatherSVG(el));
+    for (const [el, i] of futureCode.entries()) {
+      weatherSVG.push(getWeatherSVG(el, (currentHour + 1 + i) % 24));
     }
     return {
       time: futureTime,
@@ -283,7 +290,7 @@ btn.addEventListener("click", async function (e) {
     const futureWeather = await getFutureWeather(latitude, longitude);
     renderMain(exactDateString, currentLocation, currentWeather);
     renderAddition(exactDateString, currentWeather, futureWeather);
-    console.log(geoData);
+    searchInput.value = "";
   } catch (error) {
     console.error(`Something went Wrong ${error}`);
   }
