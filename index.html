@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/clouds-weather-svgrepo-com.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="styles.css" />
+    <title>WeatherNow</title>
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__container">
+        <div class="header__logo">
+          <img src="images/clouds-weather-svgrepo-com.svg" />
+          <h1>WeatherNow</h1>
+        </div>
+
+        <div class="header__search">
+          <img src="images/search-button-svgrepo-com.svg" />
+          <input
+            type="text"
+            name="input"
+            class="header__input header__input:active"
+            placeholder="Пошук"
+          />
+        <div class="btn">
+          <button>→</button>
+          <p class="error-message hide">Місто не знайдено. Перевірте назву!</p>
+        </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="main">
+      <div class="main__container container indent weather">
+        <h3>
+          ПТ, 14 СЕРПНЯ, 14:00 Україна / Вінницька область / Вінницький район
+        </h3>
+        <h2>В Вінниці хмарно, +24°C</h2>
+      </div>
+    </section>
+
+    <section class="addition">
+      <div class="addition__container container indent">
+        <div class="addition__first">
+          <h3>ПТ, 14 СЕРПНЯ, 14:00</h3>
+          <div class="addition__header">
+            <h2>Вінниці +24°C</h2>
+            <img src="images/day.svg" />
+          </div>
+          <div class="addition__main">
+            <p>Відчувається як:       +26</p>
+            <p>Вітер:    2 м/c, північний</p>
+            <p>Тиск:      745 мм рт. ст.</p>
+            <p>Вологість:          38 %</p>
+            <p>Вода:              +20</p>
+          </div>
+        </div>
+        <div class="addition__second">
+          <h2>Погода на найближчий час</h2>
+          <div class="addition__flex indent">
+            <p class="item">15:00</p>
+            <p class="item">16:00</P>
+            <p class="item">17:00</p>
+            <p class="item">18:00</p>
+            <p class="item">19:00</p>
+          </div>
+          <div class="addition__flex">
+             <img src="images/cloudy-day-1.svg" />
+             <img src="images/cloudy-day-2.svg" />
+             <img src="images/cloudy-day-3.svg" />
+             <img src="images/rainy-1.svg" />
+             <img src="images/rainy-1.svg" />
+          </div>
+          <h2>Температура повітря, °C</h2>
+          <div class="addition__flex indent">
+            <p class="item">+23</p>
+            <p class="item">+23</p>
+            <p class="item">+23</p>
+            <p class="item">+23</p>
+            <p class="item">+23</p>
+          </div>
+          <h2>Пориви вітру, м/с</h2>
+          <div class="addition__flex indent">
+            <p class="item">2</p>
+            <p class="item">3</p>
+            <p class="item">2</p>
+            <p class="item">2</p>
+            <p class="item">2</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer__container indent">
+        <p>Всі права захищені, а плагіат карається вбивством</p>
+      </div>
+    </footer>
+  </body>
+</html>
