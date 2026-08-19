@@ -2,7 +2,6 @@ const main = document.querySelector(".main__container");
 const additionFirst = document.querySelector(".addition__first");
 const additionSecond = document.querySelector(".addition__second");
 const searchInput = document.querySelector(".header__input");
-const body = document.querySelector(".body");
 const btn = document.querySelector(".btn");
 const errorMessage = document.querySelector(".error-message");
 const search = document.querySelector(".header__search");
@@ -59,8 +58,7 @@ const getWeatherDescription = function (code) {
 };
 
 const getWeatherSVG = function (code, time) {
-  const hour = parseInt(time, 10);
-  const isNight = hour >= 21 || hour <= 5;
+  const isNight = time >= 21 || time <= 5;
   if (code === 0) {
     return isNight
       ? { svg: "night.svg", img: "moon.avif" }
@@ -74,9 +72,11 @@ const getWeatherSVG = function (code, time) {
   if (code === 45 || code === 48) return { svg: "cloudy.svg", img: "mist.jpg" };
   if (code >= 51 && code <= 67) return { svg: "rainy-6.svg", img: "rainy.jpg" };
   if (code >= 71 && code <= 77)
-    return { svg: "snowy-1.svg", img: "snowy.avif" };
+    return isNight
+      ? { svg: "snowy-5.svg", img: "snowy-night.avif" }
+      : { svg: "snowy-1.svg", img: "snowy.avif" };
   if (code >= 95) return { svg: "thunder.svg", img: "thunder.avif" };
-  return { svg: "cloudy.svg", img: "White_Color.jpg" };
+  return { svg: "cloudy.svg", img: "cloudy.svg" };
 };
 
 const getLocation = async function (lat, lng) {
@@ -161,8 +161,8 @@ const getFutureWeather = async function (lat, lng) {
       futureCode.push(timeString);
     }
     const weatherSVG = [];
-    for (const [el, i] of futureCode.entries()) {
-      weatherSVG.push(getWeatherSVG(el, (currentHour + 1 + i) % 24));
+    for (const [i, el] of futureCode.entries()) {
+      weatherSVG.push(getWeatherSVG(el, currentHour + 1 + i));
     }
     return {
       time: futureTime,
@@ -295,3 +295,9 @@ btn.addEventListener("click", async function (e) {
     console.error(`Something went Wrong ${error}`);
   }
 });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
